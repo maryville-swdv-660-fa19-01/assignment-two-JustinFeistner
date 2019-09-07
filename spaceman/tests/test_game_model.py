@@ -156,17 +156,71 @@ class GameModelTests( TestCase ):
 
     ### is_game_over field
     # TODO: add tests
-    # HINT: considering adding a fixture or other widely scoped variables if you feel ]hat will
+    # HINT: considering adding a fixture or other widely scoped variables if you feel that will
     #  make this easier
 
     def test_is_game_over_is_false_if_guesses_left( self ):
-        pass
+        """The game is not over if there are guesses left."""
+        game = Game( 
+            word = 'TESTWORD',
+            guessed_word_state = ['','','S','','W','O','R',''], # Correctly guessed letters in secret word.
+            letters_guessed = ['S', 'A', 'W', 'O', 'R','C'], # List of correct & incorrect letter guesses. A, C - Incorrect guesses
+            guesses_allowed = 5, # User can make a total of 5 incorrect guesses.
+            guesses_taken = 2    # 2/5 (A, C) incorrect guesses have been made.
+        )
+        guess = 'Q'
+        game.handleGuess(guess)
+        self.assertTrue(game.guesses_taken < game.guesses_allowed)
+        self.assertFalse(game.is_game_over)
 
     def test_is_game_over_is_false_if_not_all_letters_guessed( self ):
-        pass
+        """The game is not over if all the letters aren't guessed"""
+        initialLettersGuessed = ['S', 'A', 'W', 'O', 'R','C'] # List of correct & incorrect letter guesses. A, C - Incorrect guesses
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state = ['','','S','','W','O','R',''], # Correctly guessed letters in secret word.
+            letters_guessed = initialLettersGuessed.copy(), 
+            guesses_allowed = 5, # User can make a total of 5 incorrect guesses.
+            guesses_taken = 2    # 2/5 (A, C) incorrect guesses have been made. 
+        )
+        
+        guess = 'Q'
+        game.handleGuess(guess)
+        self.assertTrue('' in game.guessed_word_state)
+        self.assertFalse(game.is_game_over)
 
     def test_is_game_over_is_true_if_no_guesses_left( self ):
-        pass
+        """The game is over if there arent any guesses left (guesses_taken == guesses_allowed)"""
+        initialLettersGuessed = ['T', 'E', 'S', 'W', 'O','R', 'Z', 'A', 'C', 'B'] # List of correct & incorrect letter guesses. Z, A, C, B - Incorrect guesses
+        game = Game( 
+            word = 'TESTWORD',
+            guessed_word_state = ['T','E','S','T','W','O','R',''],
+            letters_guessed = initialLettersGuessed.copy(),
+            guesses_allowed = 5, 
+            guesses_taken = 4
+        )
+		
+        guess = 'Q' # New incorrect guess making guesses_taken == guesses_allowed
+        game.handleGuess(guess)
+        self.assertTrue(game.guesses_taken == game.guesses_allowed)
+        self.assertTrue(game.is_game_over)
 
     def test_is_game_over_is_true_if_all_letters_guessed( self ):
-        pass
+        """The game is over if all the letters are guessed"""
+        initialLettersGuessed = ['T', 'E', 'S', 'W', 'O','R', 'A', 'C'] # List of correct & incorrect letter guesses. A, C - Incorrect guesses
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state= ['T','E','S','T','W','O','R',''],
+            letters_guessed = initialLettersGuessed.copy(),
+            guesses_allowed = 5, 
+            guesses_taken = 2
+        )
+		
+        guess = 'D' # New correct letter guess. guessed_word_state now doesnt have any blanks. 
+        game.handleGuess(guess)
+        self.assertTrue(game.is_game_over)
+        self.assertTrue('' not in game.guessed_word_state)
+
+        ## The crap below comes from modules.py. It's just a helper to keep 'game.is_game_over' straight in my head.
+        # def __updateIsGameOver( self ):
+        #     self.is_game_over = self.guesses_taken == self.guesses_allowed or not ('' in self.guessed_word_state)
