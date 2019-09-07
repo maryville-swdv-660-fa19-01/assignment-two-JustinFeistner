@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "C:\\Users\\jwfei\\.virtualenvs\\assignment-two-JustinFeistner-p3QuI0fc\\Scripts\\python.exe"
+    "python.pythonPath": "C:\\Users\\jwfei\\.virtualenvs\\assignment-two-JustinFeistner-p3QuI0fc\\Scripts\\python.exe",
+    "python.testing.pytestArgs": [
+        "spaceman"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
 }
